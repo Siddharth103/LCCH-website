@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCCH - Coding Quiz Challenge</title>
+    <link rel="stylesheet" href="css/quiz.css">
+</head>
+<body>
+    <div class="quiz-container">
+        <div id="start-screen" class="screen">
+            <h1>Coding Quiz Challenge</h1>
+            <p>Test your knowledge in Python, C++, and Java. You'll have a time limit for the quiz. Good luck!</p>
+            <button id="start-btn" class="btn">Start Quiz</button>
+        </div>
+
+        <div id="quiz-screen" class="screen hidden">
+            <div class="quiz-header">
+    <div id="timer">Time Left: <span>30</span>s</div>
+    <div id="difficulty-display" class="difficulty-tag">Easy</div>
+    <div id="question-counter">Question 1 / 50</div>
+</div>
+            <div id="question-container">
+                <h2 id="question-text">This is a sample question?</h2>
+                <div id="answer-buttons" class="btn-grid">
+                    <button class="btn answer-btn">Answer 1</button>
+                    <button class="btn answer-btn">Answer 2</button>
+                    <button class="btn answer-btn">Answer 3</button>
+                    <button class="btn answer-btn">Answer 4</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="results-screen" class="screen hidden">
+            <h1>Quiz Complete!</h1>
+            <p>Your final score is: <span id="final-score">0</span></p>
+            <button id="restart-btn" class="btn">Play Again</button>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+<script src="js/quiz.js"></script>
+    <script src="js/quiz.js"></script>
+</body>
+</html>

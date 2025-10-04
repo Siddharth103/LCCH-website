@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+    <style>
+        body { font-family: sans-serif; display: flex; height: 100vh; background-color: #111827; color: white; margin: 0; }
+        .controls { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 20px; border-right: 2px solid #374151; }
+        .leaderboard { flex: 2; padding: 20px; overflow-y: auto; }
+        button { font-size: 1.5rem; padding: 15px 30px; cursor: pointer; border: none; border-radius: 10px; }
+        #start-quiz-btn { background-color: #22c55e; color: white; }
+        #next-question-btn { background-color: #3b82f6; color: white; }
+        button:disabled { background-color: #4b5563; cursor: not-allowed; }
+        #admin-info { margin-top: 20px; font-size: 1.2rem; }
+        h2 { text-align: center; }
+        ol { list-style-type: decimal; padding-left: 40px; }
+        li { background-color: #1f2937; padding: 10px; margin-bottom: 8px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h1>Quiz Control</h1>
+        <button id="start-quiz-btn">START QUIZ</button>
+        <button id="next-question-btn" disabled>PUSH NEXT QUESTION</button>
+        <div id="admin-info">Status: Waiting to start quiz...</div>
+    </div>
+    <div class="leaderboard">
+        <h2>Live Leaderboard</h2>
+        <ol id="leaderboard-list"></ol>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const startButton = document.getElementById('start-quiz-btn');
+        const nextButton = document.getElementById('next-question-btn');
+        const infoDisplay = document.getElementById('admin-info');
+        const leaderboardList = document.getElementById('leaderboard-list');
+
+        startButton.addEventListener('click', () => { socket.emit('start-quiz'); });
+        nextButton.addEventListener('click', () => { 
+            leaderboardList.innerHTML = ''; // Clear board for next question
+            socket.emit('get-next-question'); 
+        });
+
+        socket.on('admin-update', (data) => {
+            infoDisplay.textContent = data.message;
+            startButton.disabled = true;
+            nextButton.disabled = false;
+        });
+
+        socket.on('new-question', (data) => {
+            infoDisplay.textContent = `Pushed Question ${data.questionNumber} of ${data.totalQuestions}`;
+        });
+
+        // NEW: Update leaderboard display
+        socket.on('leaderboard-update', (answers) => {
+            leaderboardList.innerHTML = ''; // Clear and redraw
+            answers.forEach((answer, index) => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${index + 1}. ${answer.name}`;
+                leaderboardList.appendChild(listItem);
+            });
+        });
+
+        socket.on('quiz-over', (data) => {
+            infoDisplay.textContent = `Quiz Over! ${data.message}`;
+            nextButton.disabled = true;
+        });
+    </script>
+</body>
+</html>

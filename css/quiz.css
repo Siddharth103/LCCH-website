@@ -1,0 +1,74 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F7F9FA;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.quiz-container {
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    width: 800px;
+    max-width: 90%;
+    padding: 40px;
+}
+
+.screen { text-align: center; }
+.hidden { display: none; }
+
+h1 { color: #0B84FF; margin-bottom: 20px; }
+p { color: #6B7280; margin-bottom: 30px; }
+
+.btn {
+    background-color: #0B84FF;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.btn:hover { background-color: #0056b3; }
+
+.quiz-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+#question-text {
+    margin-bottom: 30px;
+    font-size: 1.5rem;
+}
+
+.btn-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.answer-btn {
+    background-color: #e2e8f0;
+    color: #0F172A;
+}
+.answer-btn:hover { background-color: #cbd5e1; }
+.answer-btn.correct { background-color: #16A34A; color: white; }
+.answer-btn.wrong { background-color: #DC2626; color: white; }
+/* Styling for the new Difficulty Tag */
+.difficulty-tag {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: #fff;
+}
+
+.difficulty-tag.easy { background-color: #22c55e; } /* Green */
+.difficulty-tag.medium { background-color: #f97316; } /* Orange */
+.difficulty-tag.hard { background-color: #ef4444; } /* Red */
