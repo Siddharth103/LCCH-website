@@ -58,35 +58,50 @@ function showQuestion(questionData) {
     difficultyDisplay.className = 'difficulty-tag';
     difficultyDisplay.classList.add(questionData.question.difficulty);
 
-    // Create and display answer buttons
-    const shuffledAnswers = [...questionData.question.answers].sort(() => Math.random() - 0.5);
-    shuffledAnswers.forEach(answer => {
+    // --- START OF FIX ---
+    // 1. Create a temporary array of answers that includes their original index
+    const answersWithOriginalIndex = questionData.question.answers.map((answer, index) => {
+        return { text: answer.text, correct: answer.correct, originalIndex: index };
+    });
+
+    // 2. Shuffle this new temporary array
+    const shuffledAnswers = answersWithOriginalIndex.sort(() => Math.random() - 0.5);
+
+    // 3. Create buttons using the shuffled array
+    shuffledAnswers.forEach(answerObj => {
         const button = document.createElement('button');
-        button.innerText = answer.text;
+        button.innerText = answerObj.text;
         button.classList.add('btn', 'answer-btn');
-        if (answer.correct) {
-            button.dataset.correct = answer.correct;
+        
+        // Use the original 'correct' property for styling
+        if (answerObj.correct) {
+            button.dataset.correct = true;
         }
+        // IMPORTANT: Store the ORIGINAL index in the button's data
+        button.dataset.originalIndex = answerObj.originalIndex;
+
         button.addEventListener('click', selectAnswer);
         answerButtons.appendChild(button);
     });
+    // --- END OF FIX ---
 }
 
 function selectAnswer(e) {
     clearInterval(timer);
     const selectedButton = e.target;
-    const correct = selectedButton.dataset.correct === "true";
 
-    // Find the index of the selected answer
-    const answerIndex = Array.from(answerButtons.children).indexOf(selectedButton);
+    // --- START OF FIX ---
+    // Get the ORIGINAL index we stored in the data attribute
+    const originalAnswerIndex = selectedButton.dataset.originalIndex;
 
-    // Send the answer to the server
+    // Send this original, reliable index to the server
     socket.emit('submit-answer', {
         name: playerName,
-        answerIndex: answerIndex
+        answerIndex: originalAnswerIndex // The server expects this key name
     });
+    // --- END OF FIX ---
 
-    // Show correct/wrong status to the user
+    // Show correct/wrong status to the user (this part is unchanged)
     Array.from(answerButtons.children).forEach(button => {
         setStatusClass(button, button.dataset.correct === "true");
         button.disabled = true;
