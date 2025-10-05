@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Countdown Timer ---
-    const targetDate = new Date("October 4, 2025 17:04:00").getTime();
+    const targetDate = new Date("October 5, 2025 21:49:00").getTime();
     const daysEl = document.getElementById('days');
 
     if (daysEl) { // Only run the timer if the timer elements exist on the page
